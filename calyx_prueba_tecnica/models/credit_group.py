@@ -24,6 +24,17 @@ class CreditGroup(models.Model):
     credit_used = fields.Monetary(currency_field='conversion_currency_id', string="Credito Utilizado", compute="_compute_calculate_credit")
 
     credit_available = fields.Monetary(currency_field='conversion_currency_id', string="Credito Disponible", compute="_compute_calculate_credit")
+    
+    #CONTRAINSTS
+
+    @api.constrains('code')
+    def _check_code(self):
+        for rec in self:
+            duplicates = self.env['credit.group'].search([('code', '=', rec.code)])
+            if len(duplicates) > 1:
+                raise ValidationError('¡El valor del Código ya existe!')
+            if rec.code.endswith('026'):
+                 raise ValidationError('¡El valor del Código No puede contener 026!')
 
     #FUNCIONES CALCULADAS
 
