@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+calyx_prueba_tecnica.access_sale_channel,access_sale_channel,calyx_prueba_tecnica.model_sale_channel,base.group_user,1,1,1,1
+calyx_prueba_tecnica.access_credit_group,access_credit_group,calyx_prueba_tecnica.model_credit_group,base.group_user,1,1,1,1
+calyx_prueba_tecnica.access_wizard_credit_group,access_wizard_credit_group,calyx_prueba_tecnica.model_wizard_credit_group,base.group_user,1,1,1,1

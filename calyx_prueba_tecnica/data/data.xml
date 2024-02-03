@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record id="calyx_sequence_ch" model="ir.sequence">
+            <field name="name">Secuencia CH</field>
+            <field name="code">calyx_prueba_tecnica.secuencia</field>
+            <field name="prefix">CH</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

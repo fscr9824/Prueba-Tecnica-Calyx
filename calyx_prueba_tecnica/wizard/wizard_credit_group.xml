@@ -1,0 +1,42 @@
+<odoo>
+            <!-- Vista form user type -->
+        <record id="wizard_credit_group" model="ir.ui.view">
+                <field name="name">Informe de Grupos de Creditos</field>
+                <field name="model">wizard.credit.group</field>
+                <field name="arch" type="xml">
+                    <form string="Informe de Grupos de Creditos">
+                        <field name="state" invisible="1"/>  
+                        <group col="3">
+                            <field name="credit_groups_id" string="Grupo de Credito"/>
+                        </group>
+                        <div attrs="{'invisible':[('state', '=', 'choose')]}">
+                            <group>
+                                <field name="name" colspan="4" invisible="1"/>
+                                <field name="report" filename="name" colspan="4"/>
+                            </group>
+                        </div>
+                        <footer>
+                            <button string="Imprimir" type="object"
+                                    name="print_xls" class="oe_highlight"/>
+                            <button class="oe_highlight" special="cancel"
+                                    string="Cancelar"/>
+                        </footer>
+                    </form>
+                </field>
+        </record>
+
+        <record id="calyx_wizard_credit_group_action" model="ir.actions.act_window">
+            <field name="name">Informe de Grupos de Creditos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.credit.group</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_credit_group"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="calyx_credit_group_wizard"
+            name="Informe Grupos de Credito"
+            parent="sale.menu_sale_config"
+            action="calyx_wizard_credit_group_action"
+            sequence="0"/>
+</odoo>
