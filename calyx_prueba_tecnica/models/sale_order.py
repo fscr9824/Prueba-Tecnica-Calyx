@@ -12,12 +12,12 @@ class SalesOrderInherit(models.Model):
     sale_channel_id = fields.Many2one('sale.channel', string="Canal de Venta")
 
     #Grupos de Credito
-    credit = fields.Selection([('unlimited','Sin límite de crédito'),('available', 'Credito Disponible'), ('bloked', 'Credito Bloqueado')])
+    credit = fields.Selection([('unlimited','Sin límite de crédito'),('available', 'Credito Disponible'), ('bloked', 'Credito Bloqueado')], compute="_compute_select_sale_channel_id")
 
     #FUNCIONES ONCHANGE
 
-    @api.onchange('sale_channel_id', 'partner_id')
-    def _onchange_select_sale_channel_id(self):
+    @api.depends('sale_channel_id', 'partner_id', 'amount_total')
+    def _compute_select_sale_channel_id(self):
         if self.sale_channel_id and self.partner_id:
             credit_group = self.partner_id.credit_group_ids.filtered(lambda x: x.sale_channel_id.id == self.sale_channel_id.id)
             if credit_group:
@@ -33,10 +33,8 @@ class SalesOrderInherit(models.Model):
     # FUNCIONES HEREDADAS
 
     def action_confirm(self):
-        credit_group = self.partner_id.credit_group_ids.filtered(lambda x: x.sale_channel_id.id == self.sale_channel_id.id)
-        if credit_group:
-            if self.amount_total > credit_group.credit_available:
-                raise ValidationError("No es posible Confirmar un Pedido de Venta con el Credito Bloqueado")
+        if self.credit == 'bloked': 
+            raise ValidationError("No es posible Confirmar un Pedido de Venta con el Credito Bloqueado")
         res = super().action_confirm()
                     
 
@@ -178,12 +176,3 @@ class SalesOrderInherit(models.Model):
             )
         return moves
 
-
-class SalesOrderLineInherit(models.Model):
-    _inherit = 'sale.order.line'
-
-    #FUNCIONES ONCHANGE
-    
-    @api.onchange('product_id')
-    def _onchange_call_credit(self):
-        self.order_id._onchange_select_sale_channel_id()

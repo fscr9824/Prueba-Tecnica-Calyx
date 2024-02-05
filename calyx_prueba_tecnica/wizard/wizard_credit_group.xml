@@ -36,7 +36,7 @@
 
         <menuitem id="calyx_credit_group_wizard"
             name="Informe Grupos de Credito"
-            parent="sale.menu_sale_config"
+            parent="sale.menu_sale_report"
             action="calyx_wizard_credit_group_action"
             sequence="0"/>
 </odoo>

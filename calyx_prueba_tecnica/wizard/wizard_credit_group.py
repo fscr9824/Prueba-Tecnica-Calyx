@@ -15,6 +15,7 @@ class CreditGroupWizard(models.TransientModel):
 
     credit_groups_id = fields.Many2one('credit.group')
 
+    #Campos Creación del Reporte
     report = fields.Binary('Descargar xls', filters='.xls', readonly=True)
     name = fields.Char('File Name', size=32)
     state = fields.Selection([('choose', 'choose'), ('get', 'get')], default='choose')

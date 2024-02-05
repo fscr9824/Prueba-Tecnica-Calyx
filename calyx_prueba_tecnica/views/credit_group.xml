@@ -17,7 +17,7 @@
                         </div>
                         <group>
                             <group>
-                                <field name="code" readonly="1" string="Codigo"/>
+                                <field name="code" string="Codigo"/>
                                 <field name="sale_channel_id" string="Canal de Venta" required="1"/>
                                 <field name="credit_global" string="Credito Global" required="1"/>
                                 <field name="credit_used" string="Credito Utilizado"/>

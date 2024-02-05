@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class CreditGroup(models.Model):
     _name = 'credit.group'
-    _description = "Query para el procesamiento de asientos de TPV"
+    _description = "Grupos de Creditos"
     _rec_name = 'name'
 
     name = fields.Char(string="Nombre")
@@ -38,8 +38,21 @@ class CreditGroup(models.Model):
 
     #FUNCIONES CALCULADAS
 
-    @api.depends('credit_global')
+    @api.depends('credit_global', 'sale_channel_id')
     def _compute_calculate_credit(self):
         for registry in self:
-            registry.credit_used = 10000
-            registry.credit_available = registry.credit_global - registry.credit_used 
+            if self.sale_channel_id:
+                credit = 0
+                account_moves = self.env['account.move'].search([('state','not in',['cancel','done']),('sale_channel_id','=',self.sale_channel_id.id)])
+                if account_moves:
+                    for account_move in account_moves:
+                        credit += account_move.amount_total
+                sale_orders = self.env['sale.order'].search([('sale_channel_id','=',self.sale_channel_id.id),('invoice_status','=','to invoice')])
+                if sale_orders:
+                    for sale_order in sale_orders:
+                        credit += sale_order.amount_total
+                registry.credit_used = credit
+                registry.credit_available = registry.credit_global - registry.credit_used
+            else:
+                registry.credit_used = False
+                registry.credit_available = False
