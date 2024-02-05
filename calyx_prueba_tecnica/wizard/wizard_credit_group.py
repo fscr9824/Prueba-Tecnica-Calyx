@@ -86,7 +86,7 @@ class CreditGroupWizard(models.TransientModel):
 
         col += 1
         
-        sale_order_ids = self.env['sale.order'].search([('sale_channel_id', '=', credit_group.sale_channel_id.id)])
+        sale_order_ids = self.env['sale.order'].search([('sale_channel_id', '=', credit_group.sale_channel_id.id),('state','in',['sale','done'])])
         for sale_order in sale_order_ids: 
             writer.write_merge(col, col, 0, 0, sale_order.name, sub_header_content_style)
             writer.write_merge(col, col, 1, 1, str(sale_order.date_order), sub_header_content_style)
@@ -105,7 +105,7 @@ class CreditGroupWizard(models.TransientModel):
 
         col += 1
 
-        account_move_ids = self.env['account.move'].search([('sale_channel_id', '=', credit_group.sale_channel_id.id)])
+        account_move_ids = self.env['account.move'].search([('sale_channel_id', '=', credit_group.sale_channel_id.id),('state','=','posted')])
         for account_move in account_move_ids: 
             writer.write_merge(col, col, 0, 0, account_move.name, sub_header_content_style)
             writer.write_merge(col, col, 1, 1, str(account_move.date), sub_header_content_style)
